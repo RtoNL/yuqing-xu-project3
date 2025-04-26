@@ -2,14 +2,10 @@ import express from "express";
 import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 import { requireAuth } from "../middleware/auth.js";
+import bcryptjs from "bcryptjs";
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
-
-// Helper function to generate token
-const generateToken = (userId) => {
-  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "24h" });
-};
 
 // Register a new user
 router.post("/register", async (req, res) => {
@@ -25,20 +21,23 @@ router.post("/register", async (req, res) => {
     // Create new user (password will be hashed by the pre-save hook)
     const user = await User.create({ username, password });
 
-    // Generate token
-    const token = generateToken(user._id);
-
     // Set session
     req.session.userId = user._id;
+    req.session.username = user.username;
+
+    // Save session before sending response
+    await new Promise((resolve, reject) => {
+      req.session.save((err) => {
+        if (err) reject(err);
+        resolve();
+      });
+    });
 
     res.status(201).json({
       message: "User registered successfully",
-      token,
       user: {
         id: user._id,
         username: user.username,
-        wins: user.wins,
-        losses: user.losses,
       },
     });
   } catch (error) {
@@ -51,38 +50,55 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log(`🔐 Login attempt for user: ${username}`);
 
-    // Find user
     const user = await User.findOne({ username });
+
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      console.log(`❌ Login failed: User ${username} not found`);
+      return res.status(401).json({ message: "Invalid username or password" });
     }
 
-    // Check password
-    const isMatch = await user.comparePassword(password);
+    const isMatch = await bcryptjs.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      console.log(`❌ Login failed: Invalid password for user ${username}`);
+      return res.status(401).json({ message: "Invalid username or password" });
     }
 
-    // Generate token
-    const token = generateToken(user._id);
-
-    // Set session
+    // Set session data
     req.session.userId = user._id;
+    req.session.username = user.username;
 
+    console.log(`✅ Setting session for user ${username}:`, {
+      sessionID: req.sessionID,
+      userId: req.session.userId,
+      username: req.session.username,
+    });
+
+    // Save session before sending response
+    await new Promise((resolve, reject) => {
+      req.session.save((err) => {
+        if (err) {
+          console.error(`❌ Error saving session: ${err.message}`);
+          reject(err);
+        }
+        console.log(`✅ Session saved successfully for ${username}`);
+        resolve();
+      });
+    });
+
+    // Send response after session is saved
+    console.log(`✅ Login successful for user ${username}, sending response`);
     res.json({
       message: "Login successful",
-      token,
       user: {
         id: user._id,
         username: user.username,
-        wins: user.wins,
-        losses: user.losses,
       },
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ message: "Error logging in" });
+    res.status(500).json({ message: "Server error during login" });
   }
 });
 
@@ -101,42 +117,27 @@ router.post("/logout", (req, res) => {
 // Check if user is logged in
 router.get("/isLoggedIn", async (req, res) => {
   try {
-    // First check for token in Authorization header
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      const token = authHeader.substring(7);
-      try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        const user = await User.findById(decoded.userId).select("-password");
-        if (user) {
-          return res.json({
-            isLoggedIn: true,
-            user: {
-              id: user._id,
-              username: user.username,
-              wins: user.wins,
-              losses: user.losses,
-            },
-          });
-        }
-      } catch (err) {
-        console.error("Token verification failed:", err);
-      }
-    }
+    console.log("🔍 Checking if user is logged in:", {
+      sessionID: req.sessionID,
+      sessionData: req.session,
+      cookies: req.cookies,
+    });
 
-    // Fallback to session-based auth
-    if (!req.session.userId) {
+    if (!req.session?.userId) {
+      console.log("❌ No userId in session, user is not logged in");
       return res.json({ isLoggedIn: false });
     }
 
     const user = await User.findById(req.session.userId).select("-password");
     if (!user) {
+      console.log(`❌ User ${req.session.userId} not found in database`);
       req.session.destroy((err) => {
         if (err) console.error("Error destroying session:", err);
         res.clearCookie("connect.sid");
         return res.json({ isLoggedIn: false });
       });
     } else {
+      console.log(`✅ User ${user.username} is logged in`);
       res.json({
         isLoggedIn: true,
         user: {
