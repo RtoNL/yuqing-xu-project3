@@ -2,6 +2,10 @@ import axios from "axios";
 
 // Create axios instance with default config
 const instance = axios.create({
+  baseURL:
+    process.env.NODE_ENV === "production"
+      ? "https://yuqing-xu-yujing-cen-project3-okhg.onrender.com/api"
+      : "/api",
   withCredentials: true, // Enable sending cookies
   timeout: 5000, // 5 second timeout
   headers: {
@@ -34,6 +38,12 @@ instance.interceptors.response.use(
         `❌ ${error.response.status} ${error.config.url}:`,
         error.response.data
       );
+
+      // Redirect to login page on authentication errors
+      if (error.response.status === 401) {
+        console.log("🔑 Unauthorized, redirecting to login page");
+        window.location.href = "/login";
+      }
     } else if (error.request) {
       // Request made but no response received
       console.error("❌ No response received:", error.request);
