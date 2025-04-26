@@ -91,19 +91,23 @@ app.use(attachUser);
 app.use("/api/users", userRoutes);
 app.use("/api/games", gameRoutes);
 
-// Serve static files from frontend dist folder
-app.use(express.static(join(__dirname, "../dist")));
-
-// All non-API routes return frontend index.html
-app.get("*", (req, res) => {
-  res.sendFile(join(__dirname, "../dist", "index.html"));
-});
-
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/battleship")
   .then(() => {
     console.log("✅ Connected to MongoDB");
+
+    // Serve static files and set catch-all route only in production
+    if (process.env.NODE_ENV === "production") {
+      // Serve static files from frontend dist folder
+      app.use(express.static(join(__dirname, "../dist")));
+
+      // All non-API routes return frontend index.html
+      app.get("*", (req, res) => {
+        res.sendFile(join(__dirname, "../dist", "index.html"));
+      });
+    }
+
     app.listen(process.env.PORT || 3000, () => {
       console.log(`🚀 Server running on port ${process.env.PORT || 3000}`);
     });
