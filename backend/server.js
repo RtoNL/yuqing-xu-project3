@@ -23,28 +23,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // CORS configuration
-const allowedOrigins = [
-  "http://localhost:5173", // Local development
-  "https://yuqing-xu-project3-1.onrender.com", // Old production frontend
-  "https://yuqing-xu-yujing-cen-project3-okhg.onrender.com", // New production frontend
-];
+const productionOrigin =
+  "https://yuqing-xu-yujing-cen-project3-okhg.onrender.com";
+const developmentOrigin = "http://localhost:5173";
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.indexOf(origin) === -1) {
-        return callback(
-          new Error(
-            "The CORS policy for this site does not allow access from the specified Origin."
-          ),
-          false
-        );
-      }
-      return callback(null, origin);
-    },
+    origin:
+      process.env.NODE_ENV === "production"
+        ? productionOrigin
+        : developmentOrigin,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: [
@@ -74,10 +62,6 @@ app.use(
       httpOnly: true,
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      domain:
-        process.env.NODE_ENV === "production"
-          ? ".onrender.com" // Allow cookies for all subdomains
-          : undefined,
     },
     store:
       process.env.NODE_ENV === "production"
