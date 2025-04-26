@@ -1,0 +1,97 @@
+.highscores-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.highscores-container h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+.score-section {
+  margin-bottom: 30px;
+}
+
+.score-section h2 {
+  color: #2980b9;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  padding-left: 10px;
+  border-left: 4px solid #3498db;
+}
+
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.score-table th,
+.score-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.score-table th {
+  background-color: #3498db;
+  color: white;
+  font-weight: bold;
+}
+
+.score-table tr:nth-child(even) {
+  background-color: #ecf0f1;
+}
+
+.score-table tr:hover {
+  background-color: #e8f4f8;
+}
+
+.score-table tr:first-child {
+  background-color: #f39c12;
+}
+
+.score-table tr:first-child td {
+  color: #fff;
+  font-weight: bold;
+}
+
+.info-box {
+  background-color: #eaf2f8;
+  border-left: 4px solid #3498db;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 4px;
+}
+
+.info-box h3 {
+  color: #2980b9;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.info-box p {
+  margin-bottom: 10px;
+  line-height: 1.5;
+  color: #34495e;
+}
+
+@media (max-width: 768px) {
+  .highscores-container {
+    padding: 15px;
+    margin: 10px;
+  }
+
+  .score-table th,
+  .score-table td {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+}
