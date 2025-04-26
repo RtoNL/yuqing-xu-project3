@@ -2,10 +2,9 @@ import axios from "axios";
 
 // Create axios instance with default config
 const instance = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "production"
-      ? "https://yuqing-xu-yujing-cen-project3-okhg.onrender.com/api"
-      : "/api",
+  baseURL: import.meta.env.PROD
+    ? "https://yuqing-xu-yujing-cen-project3-okhg.onrender.com/api"
+    : "http://localhost:3000/api",
   withCredentials: true, // Enable sending cookies
   timeout: 5000, // 5 second timeout
   headers: {
