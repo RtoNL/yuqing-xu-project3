@@ -24,7 +24,8 @@ const __dirname = dirname(__filename);
 // CORS configuration
 const allowedOrigins = [
   "http://localhost:5173", // Local development
-  "https://yuqing-xu-project3-1.onrender.com", // Production frontend
+  "https://yuqing-xu-project3-1.onrender.com", // Old production frontend
+  "https://yuqing-xu-yujing-cen-project3-okhg.onrender.com", // New production frontend
 ];
 
 app.use(
