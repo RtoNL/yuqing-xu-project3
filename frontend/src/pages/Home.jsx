@@ -71,7 +71,7 @@ const Home = () => {
                 <span className="text-xl">📖</span>
               </Link>
               <Link
-                to="/scores"
+                to="/highscores"
                 className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-300 to-blue-400 hover:from-blue-400 hover:to-blue-500 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition duration-200"
               >
                 <span>High Scores</span>
