@@ -2,6 +2,9 @@ import axios from "axios";
 
 // Create axios instance with default config
 const instance = axios.create({
+  baseURL: import.meta.env.PROD
+    ? "https://yuqing-xu-project3.onrender.com" // Production backend URL
+    : "http://localhost:3000", // Development backend URL
   withCredentials: true, // Enable sending cookies
   timeout: 5000, // 5 second timeout
   headers: {
