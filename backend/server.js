@@ -66,23 +66,40 @@ app.use(cookieParser());
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "your-secret-key",
-    resave: false,
+    resave: true,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      domain:
+        process.env.NODE_ENV === "production"
+          ? ".onrender.com" // Allow cookies for all subdomains
+          : undefined,
     },
     store:
       process.env.NODE_ENV === "production"
         ? new MongoStore({
             mongoUrl: process.env.MONGODB_URI,
             ttl: 24 * 60 * 60, // = 24 hours
+            autoRemove: "native",
+            touchAfter: 24 * 3600, // Only update the session every 24 hours unless the data changes
           })
         : undefined,
   })
 );
+
+// Add this before your routes
+app.use((req, res, next) => {
+  console.log("Session Debug:", {
+    id: req.sessionID,
+    userId: req.session?.userId,
+    cookie: req.session?.cookie,
+  });
+  next();
+});
 
 app.use(attachUser);
 
