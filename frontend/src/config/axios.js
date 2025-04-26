@@ -3,8 +3,8 @@ import axios from "axios";
 // Create axios instance with default config
 const instance = axios.create({
   baseURL: import.meta.env.PROD
-    ? "https://yuqing-xu-yujing-cen-project3-okhg.onrender.com/api" // ✅ 添加回 /api
-    : "http://localhost:3000/api", // ✅ 添加回 /api
+    ? "https://yuqing-xu-yujing-cen-project3-okhg.onrender.com/api" // Include /api prefix
+    : "http://localhost:3000/api", // Include /api prefix
   withCredentials: true, // Enable sending cookies
   timeout: 5000, // 5 second timeout
   headers: {
