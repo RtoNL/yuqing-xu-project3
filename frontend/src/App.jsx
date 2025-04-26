@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import HighScores from "./pages/HighScores";
 import Rules from "./pages/Rules";
+import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -43,6 +44,8 @@ function App() {
                   </PrivateRoute>
                 }
               />
+              {/* 404 page - must be last */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </div>
