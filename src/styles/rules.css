@@ -1,0 +1,90 @@
+.rules-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rules-container h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+.rule-section {
+  margin-bottom: 25px;
+}
+
+.rule-section h2 {
+  color: #2980b9;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.rule-section h3 {
+  color: #3498db;
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.rule-section p {
+  line-height: 1.6;
+  color: #34495e;
+}
+
+.rule-section ul,
+.rule-section ol {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+.rule-section li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+  color: #34495e;
+}
+
+.symbol {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 4px;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.symbol.ship {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.symbol.hit {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.symbol.miss {
+  background-color: #2ecc71;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .rules-container {
+    padding: 15px;
+    margin: 10px;
+  }
+
+  .rules-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .rule-section h2 {
+    font-size: 1.3rem;
+  }
+}

@@ -1,0 +1,134 @@
+/* Home page styles - integrated with Bootstrap */
+.home-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.home-container h1 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+}
+
+.home-container p {
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
+.game-modes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.game-modes h2 {
+  color: #34495e;
+  margin-bottom: 1rem;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.btn {
+  display: block;
+  padding: 1rem;
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+}
+
+.btn:hover {
+  background-color: #2980b9;
+}
+
+/* Logo styles */
+.logo {
+  max-width: 200px;
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.1);
+}
+
+/* Game mode card styles */
+.game-modes-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.game-mode-card {
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.game-mode-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.normal-mode {
+  background-color: #2ecc71;
+}
+
+.normal-mode:hover {
+  background-color: #27ae60;
+}
+
+.free-mode {
+  background-color: #e74c3c;
+}
+
+.free-mode:hover {
+  background-color: #c0392b;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Add responsive design */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 1rem;
+  }
+
+  .home-container h1 {
+    font-size: 2rem;
+  }
+
+  .buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+  }
+
+  .game-modes {
+    grid-template-columns: 1fr;
+  }
+
+  .logo {
+    width: 150px;
+  }
+}

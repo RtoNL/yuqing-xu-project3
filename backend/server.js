@@ -7,6 +7,8 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
 import gameRoutes from "./routes/gameRoutes.js";
 import { attachUser } from "./middleware/auth.js";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
 dotenv.config();
 
@@ -14,6 +16,10 @@ dotenv.config();
 process.env.NODE_ENV = process.env.NODE_ENV || "development";
 
 const app = express();
+
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // CORS configuration
 const allowedOrigins = [
@@ -58,17 +64,23 @@ app.use(
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // use "none" in production, "lax" in development
-      domain:
-        process.env.NODE_ENV === "production" ? ".onrender.com" : undefined,
     },
   })
 );
 
 app.use(attachUser);
 
-// Routes
+// API Routes
 app.use("/api/users", userRoutes);
 app.use("/api/games", gameRoutes);
+
+// Serve static files from frontend dist folder
+app.use(express.static(join(__dirname, "../dist")));
+
+// All non-API routes return frontend index.html
+app.get("*", (req, res) => {
+  res.sendFile(join(__dirname, "../dist", "index.html"));
+});
 
 // Connect to MongoDB
 mongoose
