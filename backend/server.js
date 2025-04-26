@@ -10,13 +10,16 @@ import { attachUser } from "./middleware/auth.js";
 
 dotenv.config();
 
+// Set NODE_ENV
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
+
 const app = express();
 
 // CORS configuration
 app.use(
   cors({
-    origin: true, // Allow all origins
-    credentials: true, // Allow credentials (cookies)
+    origin: process.env.FRONTEND_URL || "http://localhost:5173", // Frontend URL
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -29,13 +32,16 @@ app.use(cookieParser());
 // Session configuration
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "your-secret-key", // Use environment variable
+    secret: process.env.SESSION_SECRET || "your-secret-key",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production", // Only use secure in production
+      secure: process.env.NODE_ENV === "production", // only secure in production
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // use "none" in production, "lax" in development
+      domain:
+        process.env.NODE_ENV === "production" ? ".onrender.com" : undefined,
     },
   })
 );
@@ -58,5 +64,3 @@ mongoose
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err);
   });
-
-export default app;
