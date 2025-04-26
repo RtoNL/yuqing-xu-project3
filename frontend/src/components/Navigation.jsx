@@ -15,14 +15,14 @@ const Navigation = () => {
     }
   };
 
-  const handleNewGame = async () => {
+  const handleCreateGame = async () => {
     if (!isAuthenticated) {
       navigate("/login");
       return;
     }
 
     try {
-      const response = await axios.post("/api/games/create");
+      const response = await axios.post("/games/create");
       const { success, game } = response.data;
 
       if (!success || !game || !game._id) {
@@ -79,7 +79,7 @@ const Navigation = () => {
 
           <div className="hidden md:flex items-center space-x-4">
             <button
-              onClick={handleNewGame}
+              onClick={handleCreateGame}
               className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-150 flex items-center space-x-2"
             >
               <span>New Game</span>

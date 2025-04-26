@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await axios.get("/api/users/isLoggedIn");
+      const response = await axios.get("/users/isLoggedIn");
       if (response.data.isLoggedIn) {
         setUser(response.data.user);
       } else {
@@ -31,7 +31,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await axios.post("/api/users/login", {
+      setLoading(true);
+      const response = await axios.post("/users/login", {
         username,
         password,
       });
@@ -54,7 +55,8 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (username, password) => {
     try {
-      const response = await axios.post("/api/users/register", {
+      setLoading(true);
+      const response = await axios.post("/users/register", {
         username,
         password,
       });
@@ -77,7 +79,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post("/api/users/logout");
+      await axios.post("/users/logout");
       setUser(null);
       localStorage.removeItem("token");
       return { success: true };

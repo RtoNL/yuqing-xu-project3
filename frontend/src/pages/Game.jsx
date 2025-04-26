@@ -216,7 +216,7 @@ const Game = () => {
           "Retry count:",
           retryCount
         );
-        const response = await axios.get(`/api/games/${id}`);
+        const response = await axios.get(`/games/${id}`);
         console.log("📥 Server response:", response.data);
 
         const { success, game } = response.data;
@@ -324,7 +324,7 @@ const Game = () => {
           currentTurn: game.currentTurn?.username,
         });
 
-        const response = await axios.post(`/api/games/${game._id}/move`, {
+        const response = await axios.post(`/games/${game._id}/move`, {
           row,
           col,
         });
@@ -610,7 +610,7 @@ const Game = () => {
 
       console.log("📤 Submitting validated ships to server:", shipsArray);
 
-      const response = await axios.post(`/api/games/${game._id}/place-ships`, {
+      const response = await axios.post(`/games/${game._id}/place-ships`, {
         ships: shipsArray,
       });
 

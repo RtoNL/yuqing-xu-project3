@@ -22,7 +22,7 @@ const GamesList = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get("/api/games");
+      const response = await axios.get("/games");
       const allGames = response.data;
 
       // Categorize games - ensure each game only appears in one category
@@ -79,11 +79,13 @@ const GamesList = () => {
 
   useEffect(() => {
     fetchGames();
+    const interval = setInterval(fetchGames, 5000);
+    return () => clearInterval(interval);
   }, [fetchGames]);
 
   const handleJoinGame = async (gameId) => {
     try {
-      const response = await axios.post(`/api/games/${gameId}/join`);
+      const response = await axios.post(`/games/${gameId}/join`);
       if (response.data) {
         toast.success("Successfully joined the game!");
         navigate(`/game/${gameId}`);

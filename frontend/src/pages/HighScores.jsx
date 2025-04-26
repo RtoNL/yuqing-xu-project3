@@ -10,11 +10,11 @@ const HighScores = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    const fetchScores = async () => {
+    const fetchHighScores = async () => {
       setLoading(true);
       setError("");
       try {
-        const response = await axios.get("/api/users/scores");
+        const response = await axios.get("/users/scores");
 
         if (!response.data.success) {
           throw new Error(response.data.message || "Failed to fetch scores");
@@ -43,7 +43,7 @@ const HighScores = () => {
       }
     };
 
-    fetchScores();
+    fetchHighScores();
   }, []);
 
   if (loading) {
