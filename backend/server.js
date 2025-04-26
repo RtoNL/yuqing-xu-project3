@@ -9,6 +9,7 @@ import gameRoutes from "./routes/gameRoutes.js";
 import { attachUser } from "./middleware/auth.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import MongoStore from "connect-mongo";
 
 dotenv.config();
 
@@ -61,11 +62,18 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production", // Only secure in production
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      sameSite: "lax", // Always use lax for compatibility
     },
+    store:
+      process.env.NODE_ENV === "production"
+        ? new MongoStore({
+            mongoUrl: process.env.MONGODB_URI,
+            ttl: 24 * 60 * 60, // = 24 hours
+          })
+        : undefined,
   })
 );
 
