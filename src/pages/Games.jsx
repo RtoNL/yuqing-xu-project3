@@ -11,10 +11,9 @@ const Games = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchGames = async () => {
+    (async () => {
       try {
-        const gamesResponse = await axios.get("/api/games");
-
+        const gamesResponse = await axios.get("/games");
         if (gamesResponse.data && gamesResponse.data.success) {
           setGames(gamesResponse.data.games || []);
         } else {
@@ -28,9 +27,7 @@ const Games = () => {
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchGames();
+    })();
   }, [isAuthenticated]);
 
   // Filter joinable games on the frontend
@@ -74,7 +71,7 @@ const Games = () => {
 
   const handleJoinGame = async (gameId) => {
     try {
-      const response = await axios.post(`/api/games/${gameId}/join`);
+      const response = await axios.post(`/games/${gameId}/join`);
       if (response.data.success) {
         toast.success("Successfully joined the game!");
         navigate(`/game/${gameId}`);
@@ -89,11 +86,10 @@ const Games = () => {
 
   const handleCreateGame = async () => {
     try {
-      const response = await axios.post("/api/games/create");
+      const response = await axios.post("/games/create");
       console.log("🎮 Creating new game:", response.data);
 
       const { success, game } = response.data;
-
       if (!success || !game) {
         throw new Error("Invalid response format");
       }

@@ -12,7 +12,7 @@ const Home = () => {
 
   const handleCreateGame = async () => {
     try {
-      const response = await axios.post("/api/games/create");
+      const response = await axios.post("/games/create");
       const { success, game } = response.data;
 
       if (!success || !game || !game._id) {

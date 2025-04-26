@@ -10,40 +10,39 @@ const HighScores = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    const fetchScores = async () => {
+    (async () => {
       setLoading(true);
       setError("");
+
       try {
-        const response = await axios.get("/api/users/scores");
+        const response = await axios.get("/users/scores");
 
         if (!response.data.success) {
           throw new Error(response.data.message || "Failed to fetch scores");
         }
 
-        // Sort the scores
+        // Sort scores by win rate, then total games, then alphabetically
         const sortedScores = response.data.scores.sort((a, b) => {
-          // 1. Sort by win rate descending
+          // First by win rate (descending)
           if (parseFloat(b.winRate) !== parseFloat(a.winRate)) {
             return parseFloat(b.winRate) - parseFloat(a.winRate);
           }
-          // 2. If win rates are equal, sort by total games descending
+          // Then by total games (descending)
           if (b.totalGames !== a.totalGames) {
             return b.totalGames - a.totalGames;
           }
-          // 3. If total games are equal, sort by username alphabetically ascending
+          // Finally by username (ascending)
           return a.username.localeCompare(b.username);
         });
 
         setScores(sortedScores);
-      } catch (err) {
-        console.error("Error fetching high scores:", err);
+      } catch (error) {
+        console.error("Error fetching high scores:", error);
         setError("Failed to load high scores. Please try again later.");
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchScores();
+    })();
   }, []);
 
   if (loading) {

@@ -14,9 +14,9 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchStats = async () => {
+    (async () => {
       try {
-        const response = await axios.get("/api/users/stats");
+        const response = await axios.get("/users/stats");
         if (response.data.success) {
           setStats(response.data.stats);
         } else {
@@ -28,9 +28,7 @@ const Profile = () => {
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchStats();
+    })();
   }, []);
 
   if (loading) {
